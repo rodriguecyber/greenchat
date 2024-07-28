@@ -7,3 +7,5 @@ export const hashedPassword = async (password: string) => {
     throw Error(error);
   }
 };
+
+
