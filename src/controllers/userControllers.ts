@@ -34,7 +34,7 @@ class UserControllers {
     const user = req.body
     const userInfo =  await userServices.getUser(user)
     if(!userInfo){
-      return res.status(404).json({message:"email not found"})
+      return res.status(500).json({message:"email not found"})
     }
     if(!userInfo.isVerified){
      return res.status(200).json({ message: "user not verified" }); 
@@ -44,8 +44,18 @@ class UserControllers {
     return  res.status(200).json({message:"password not match"})
     }
     const token = await generateToken(userInfo)
-    return res.status(200).json({message:"login successfull", token})
+    return res.status(200).json({token})
 
   }
+   loggedUSer  = async (req:Request,res:Response)=>{
+    try {
+      
+      const user = (req as any).user;
+      const loggedUSer = await userServices.getUser(user);
+      res.status(200).json({ user: loggedUSer });
+    } catch (error) {
+      res.status(500).json("failed to load logged user")
+    }
+   }
 }
 export default new UserControllers();
